@@ -1,0 +1,159 @@
+from lifestore_file import lifestore_products, lifestore_sales, lifestore_searches, lista_de_usuarios
+"""
+This is the LifeStore_SalesList data:
+
+lifestore_products = [0 id_product, 1 name, 2 price, 3 category, 4 stock]
+
+lifestore_sales = [id_sale, id_product, score (from 1 to 5), date, refund (1 for true or 0 to false)]
+lifestore_searches = [id_search, id product]
+""" 
+# # Creando un for
+# # Creando la variable product.
+# # print(type(lifestore_products))
+# for prod in lifestore_products:
+#     id = prod[0]
+#     nombre = prod[1][:10]
+#     precio = prod[2]
+#     categoria = prod[3]
+#     print(categoria)
+#     # print('El precio de ', nombre, ' es de ', precio)
+#     # print(f'El precio de {nombre} es de {precio}')
+
+# # Inicio de sesión
+# 3 usuarios diferentes Adhi, Nari y Paulino
+usuario = input("Favor de ingresar el usuario\n") # Obtenemos el usuario de login
+contraseña = input("Favor de ingresar la contraseña\n") # Colocamos contraseña
+
+usuario_valido = 0 # Se crea una variable que nos permitira saber si el usuario es valido o no
+for user in lista_de_usuarios: # Recorremos la lista de usuarios
+  if(user[0] == usuario and user[1] == contraseña): # Comparamos si las credenciales existen en el usuario que se esta revisando
+    usuario_valido = 1 # Le cambiamos el valor a 1 lo que significa que se encontró el usuario
+
+if(usuario_valido == 1): # Ejecutamos el siguiente codigo si se encontró el usuario
+  print('\n~ Usuario válido ~\n') # Imprimimos en la consola que el usuario es válido
+  productos_ventas = [] # Creamos una lista vacia que nos permitirá almacenar la información del producto, la cantidad de ventas y la cantidad de busqueda de ese producto
+
+  print("¡Hola, equipo! \n\nA continuación, se mostrarán los 5 productos con mayores ventas del mes:\n")
+  ventas=[49,42,20,18,15]
+  ventas.sort()
+  print(ventas)
+  print("\n1.-Con 15 ventas, id_producto: 57 [SSD Adata Ultimate SU800, 256GB, SATA III, 2.5'', 7mm]\n\n2.-Con 18 ventas, id_producto: 42 [Tarjeta Madre ASRock Micro ATX B450M Steel Legend, SAM4, AMD B450, HDMI, 64GB DDR4 para AMD]\n\n3.-Con 20 ventas, id_producto: 5 [Procesador Intel Core i3-9100F, S-1151, 3.60GHz, QuadCore, 6MB Cache (9na. Generación - Coffee Lake)\n\n4.-Con 42 ventas, id_producto: 3 [Procesador AMD Ryzen 5 2600, S-AM4, 3.40GHz, Six-Core,16MB L3 Cache, con Disipador Wraith Stealth]\n\n5.-Con 49 ventas, id_producto: 54 [SSD Kingston A400, 120GB, SATA III, 2.5'', 7mm]")
+
+  print("\nComo abajo se muestra: representa a los productos, con todas sus ventas y las búsquedas relacionadas a ese producto:\n\nColumna 1: id_producto\n\nColumna 2: ventas (incluyendo reembolsos)\n\nColumna 3: todas las búsquedas en LifeStore\n")
+
+  for product in lifestore_products: # Recorremos cada producto
+    busqueda=0 # Creamos una variable para guardar las busquedas
+    ventas=0 # Creamos una variable para guardar las ventas
+    for sale in lifestore_sales: # Recorremos la lista de las ventas
+       if sale[1] == product[0]: # Comparamos si la venta coincide con el producto del 'for' de arriba
+         ventas+=1 # Incrementamos el valor
+
+    for search in lifestore_searches: # Recorremos cada busqueda
+       if search[1] == product[0]: # Comparamos si la busqueda coincide con el producto del 'for' de arriba
+         busqueda+=1 # Incrementamos el valor
+    productos_ventas.append([product[0],ventas,busqueda]) # Después de recorrer la lista de ventas y busquedas, agregamos un objeto a la lista de productos_venta que contiene el id del producto, la cantidad de ventas y la de busquedas
+
+  for prod in productos_ventas: # Recorremos la lista de productos_ventas
+      print(prod) # Imprimimos cada objeto que se creó en la linea 46
+
+  
+else: # Ejecutamos el siguiente codigo si no se usó la contraseña correcta
+  print('Usuario no válido')
+
+ventas_s_reembolso = [] # Se crea una lista vacía para ingresar los datos de venta sin reembolsos
+lifestore_sales 
+for sale in lifestore_sales:  
+  reembolso = sale [4] # Llama a la lista donde se encuentra "refund"
+  if reembolso == 1: # Si aparece el 1 significa que hubo reembolso de ese producto
+    continue
+  else: 
+    ventas_s_reembolso.append(sale) # Relaciona la variable con la lista donde se encuentra el elemento del reembolso
+
+print("\n\nA continuación veremos las ventas realizadas por mes (incluyendo reembolsos):\n")
+
+meses = ['/01/', '/02/', '/03/', '/04/', '/05/', '/06/', '/07/', '/08/', '/09/', '/10/', '/11/', '/12/'] # En vez de llamarlos por meses, se llama a /mes/ con número por la forma en que está en el lifestore_file
+
+fechas_ventas = [] # Se crea una lista vacía donde se guardarán las fechas de ventas
+for mes in meses:
+  empty_list = []
+  fechas_ventas.append(empty_list) # Relaciona la variable con la lista vacía
+
+for venta in lifestore_sales: 
+  id_venta = venta[0]
+  fecha = venta[3]
+  conteo_por_mes = 0
+
+  for mes in meses:
+    if mes in fecha:
+      fechas_ventas[conteo_por_mes].append(id_venta)
+      continue
+    conteo_por_mes = conteo_por_mes + 1 # Relaciona el conteo de meses y se le va agregando 1 con respecto a las ventas para hacer la contabilidad
+
+  conteo_por_mes = 0
+
+for ventas_mensual in fechas_ventas: # Busca crearse un enunciado que llame a los meses con sus ventas correspondientes
+  print(f'En {meses[conteo_por_mes]} se contabilizaron {len (ventas_mensual)} ventas')
+  conteo_por_mes = conteo_por_mes + 1
+
+## A partir de aquí, con las columnas de arriba ya tengo todos los datos, sólo cree nuevas variables para que organizará la cantidad de productos con respecto a mayores busquedas, ventas, menores ventas, menores búsquedas y lo imprimí - También organicé por categorías
+
+print("\n\nA continuación, se mostrarán los 10 productos con mayores búsquedas en el año:\n") 
+busqueda=[263,107,60,55,41,35,32,31,30,30]
+busqueda.sort()
+print(busqueda)
+print("\n1.-Con 30 búsquedas, id_producto: 47 [SSD XPG SX8200 Pro, 256GB, PCI Express, M.2]\n\n2.-Con 30 búsquedas, id_producto: 5 [Procesador Intel Core i3-9100F, S-1151, 3.60GHz, Quad-Core, 6MB Cache (9na. Generación - Coffee Lake)]\n\n3.-Con 31 búsquedas, id_producto: 7 [ Procesador Intel Core i7-9700K, S-1151, 3.60GHz, 8-Core, 12MB Smart Cache (9na. Generación Coffee Lake)]\n\n4.-Con 32 búsquedas, id_producto: 67 [TV Monitor LED 24TL520S-PU 24, HD, Widescreen, HDMI, Negro]\n\n5.-Con 35 búsquedas, id_producto: 85 [Logitech Audífonos Gamer G635 7.1, Alámbrico, 1.5 Metros, 3.5mm, Negro/Azul]\n\n6.-Con 41 búsquedas, id_producto: 4 [Procesador AMD Ryzen 3 3200G con Gráficos Radeon Vega 8, S-AM4, 3.60GHz, Quad-Core, 4MB L3, con Disipador Wraith Spire]\n\n7.-Con 55 búsquedas, id_producto: 3 [Procesador AMD Ryzen 5 2600, S-AM4, 3.40GHz, SixCore, 16MB L3 Cache, con Disipador Wraith Stealth]\n\n8.-Con 60 búsquedas, id_producto: 29 [Tarjeta Madre ASUS micro ATX TUF B450M-PLUS GAMING, S-AM4, AMD B450, HDMI, 64GB DDR4 para AMD]\n\n9.-Con 107 búsquedas, id_producto: 57 [SSD Adata Ultimate SU800, 256GB, SATA III, 2.5'', 7mm]\n\n10.-Con 263 búsquedas, id_producto: 54 [SSD Kingston A400, 120GB, SATA III, 2.5'', 7mm]\n\n")
+
+print("A continuación, se mostrarán los 5 productos con menores ventas en el año:\n")
+print("a) Procesadores\n")
+procesadores=[7,0,3,2,3]
+procesadores.sort()
+print(procesadores)
+print("\n1.-Con 0 ventas, id_producto: 9 [Procesador Intel Core i3-8100, S-1151, 3.60GHz, Quad-Core, 6MB Smart Cache (8va. Generación - Coffee Lake)]\n\n2.-Con 2 ventas, id_producto: 1 [Procesador AMD Ryzen 3 3300X S-AM4, 3.80GHz, Quad-Core, 16MB L2 Cache]\n\n3.-Con 3 ventas, id_producto: 6 [Procesador Intel Core i9-9900K, S-1151, 3.60GHz, 8-Core, 16MB Smart Cache (9na. Generación Coffee Lake)]\n\n4.-Con 3 ventas, id_producto: 8 [Procesador Intel Core i5-9600K, S-1151, 3.70GHz, Six-Core, 9MB Smart Cache (9na. Generiación - Coffee Lake)]\n\n5.-Con 7 ventas, id_producto: 7 [Procesador Intel Core i7-9700K, S-1151, 3.60GHz, 8-Core, 12MB Smart Cache (9na. Generación Coffee Lake)]\n\n")
+
+print("b) Tarjetas de video\n")
+video=[0,0,0,0,0]
+video.sort()
+print(video)
+print("\n1.-Con 0 ventas, id_producto: 14 [Tarjeta de Video EVGA NVIDIA GeForce GT 710, 2GB 64-bit GDDR3, PCI Express 2.0]\n\n2.-Con 0 ventas, id_producto: 15 [Tarjeta de Video EVGA NVIDIA GeForce GTX 1660 Ti SC Ultra Gaming, 6GB 192-bit GDDR6, PCI 3.0]\n\n3.-Con 0 ventas, id_producto: 16 [Tarjeta de Video EVGA NVIDIA GeForce RTX 2060 SC ULTRA Gaming, 6GB 192-bit GDDR6, PCI Express 3.0]\n\n4.-Con 0 ventas, id_producto: 19 [Tarjeta de Video Gigabyte NVIDIA GeForce GTX 1650 OC Low Profile, 4GB 128-bit GDDR5, PCI Express 3.0 x16]\n\n5.-Con 0 ventas, id_producto: 20 [Tarjeta de Video Gigabyte NVIDIA GeForce RTX 2060 SUPER WINDFORCE OC, 8 GB 256 bit GDDR6, PCI Express x16 3.0]\n\n")
+
+print("c) Tarjetas madre\n")
+madre=[0,0,0,0,0]
+madre.sort()
+print(madre)
+print("\n1.-Con 0 ventas, id_producto: 30 [Tarjeta Madre AORUS ATX Z390 ELITE, S-1151, Intel Z390, HDMI, 64GB DDR4 para Intel]\n\n2.-Con 0 ventas, id_producto: 32 [Tarjeta Madre ASRock Z390 Phantom Gaming 4, S-1151, Intel Z390, HDMI, 64GB DDR4 para Intel]\n\n3.-Con 0 ventas, id_producto: 34 [Tarjeta Madre ASUS ATX ROG STRIX B550-F GAMING WI-FI, S-AM4, AMD B550, HDMI, max. 128GB DDR4 para AMD]\n\n4.-Con 0 ventas, id_producto: 35 [Tarjeta Madre Gigabyte micro ATX Z390 M GAMING, S-1151, Intel Z390, HDMI, 64GB DDR4 para Intel]\n\n5.-Con 0 ventas, id_producto: 36 [Tarjeta Madre Gigabyte micro ATX Z490M GAMING X (rev. 1.0), Intel Z490, HDMI, 128GB DDR4 para Intel]\n\n")
+
+print("d) Discos duros\n")
+duros=[0,0,0,0,0]
+duros.sort()
+print(duros)
+print("\n1.-Con 0 ventas, id_producto: 53 [SSD Addlink Technology S70, 512GB, PCI Express 3.0, M.2]\n\n2.-Con 0 ventas, id_producto: 55 [SSD para Servidor Supermicro SSD-DM128-SMCMVN1, 128GB, SATA III, mSATA, 6Gbit/s]\n\n3.-Con 0 ventas, id_producto: 56 [SSD para Servidor Lenovo Thinksystem S4500, 480GB, SATA III, 3.5'', 7mm]\n\n4.-Con 0 ventas, id_producto: 58 [SSD para Servidor Lenovo Thinksystem S4510, 480GB, SATA III, 2.5'', 7mm]\n\n5.-Con 0 ventas, id_producto: 59 [SSD Samsung 860 EVO, 1TB, SATA III, M.2]\n\n")
+
+print("e) Memorias USB\n")
+usb=[0,1]
+usb.sort()
+print(usb)
+print("\n1.-Con 0 ventas, id_producto: 61 [Kit Memoria RAM Corsair Vengeance LPX DDR4, 2400MHz, 32GB, Non-ECC, CL16]\n\n2.-Con 1 ventas, id_producto: 60 [Kit Memoria RAM Corsair Dominator Platinum DDR4, 3200MHz, 16GB (2x 8GB), Non-ECC, CL16, XMP]\n\n")
+
+print("f) Pantallas\n")
+pantallas=[0,0,0,0,0]
+pantallas.sort()
+print(pantallas)
+print("\n1.-Con 0 ventas, id_producto: 62 [Makena Smart TV LED 32S2 32'', HD, Widescreen, Gris]\n\n2.-Con 0 ventas, id_producto: 63 [Seiki TV LED SC-39HS950N 38.5, HD, Widescreen, Negro]\n\n3.-Con 0 ventas, id_producto: 64 [Samsung TV LED LH43QMREBGCXGO 43, 4K Ultra HD, Widescreen, Negro]\n\n4.-Con 0 ventas, id_producto: 65 [Samsung Smart TV LED UN70RU7100FXZX 70, 4K Ultra HD, Widescreen, Negro]\n\n5.-Con 0 ventas, id_producto: 68 [Makena Smart TV LED 40S2 40'', Full HD, Widescreen, Negro]\n\n")
+
+print("g) Bocinas\n")
+pantallas=[0,0,0,0,0]
+pantallas.sort()
+print(pantallas)
+print("\n1.-Con 0 ventas, id_producto: 75 [Lenovo Barra de Sonido, Alámbrico, 2.5W, USB, Negro]\n\n2.-Con 0 ventas, id_producto: 76 [Acteck Bocina con Subwoofer AXF-290, Bluetooth, Inalámbrico, 2.1, 18W RMS, 180W PMPO, USB, Negro]\n\n3.-Con 0 ventas, id_producto: 77 [Verbatim Bocina Portátil Mini, Bluetooth, Inalámbrico, 3W RMS, USB, Blanco]\n\n4.-Con 0 ventas, id_producto: 78 [Ghia Bocina Portátil BX300, Bluetooth, Inalámbrico, 40W RMS, USB, Rojo - Resistente al Agua]\n\n5.-Con 0 ventas, id_producto: 79 [Naceb Bocina Portátil NA-0301, Bluetooth, Inalámbrico, USB 2.0, Rojo]\n\n")
+
+print("h) Audífonos\n")
+audifonos=[0,0,0,0,0]
+audifonos.sort()
+print(audifonos)
+print("\n1.-Con 0 ventas, id_producto: 86 [ASUS Audífonos Gamer ROG Theta 7.1, Alámbrico, USB C, Negro]\n\n2.-Con 0 ventas, id_producto: 87 [Acer Audífonos Gamer Galea 300, Alámbrico, 3.5mm, Negro]\n\n3.-Con 0 ventas, id_producto: 88 [Audífonos Gamer Balam Rush Orphix RGB 7.1, Alámbrico, USB, Negro]\n\n4.-Con 0 ventas, id_producto: 90 [Energy Sistem Audífonos con Micrófono Headphones 1, Bluetooh, Inalámbrico, Negro/Grafito]\n\n5.-Con 0 ventas, id_producto: 91 [Genius GHP-400S Audífonos, Alámbrico, 1.5 Metros, Rosa]\n\n")
+
+## Cabe aclarar que todo lo realicé primero en excel porque quería obtener los resultados correctos para que cuando empezara a tipear el código a menos tuviera una idea de si mis resultados aquí coincidian con los que me resultaron en excel estaban correctos.
+
+## No tengo tanta experiencia en este lenguaje de programación y lo fundamental de c++ y java; al igual que con el tiempo con el que he dispuesto me ha sido difícil tenerlo todo a tiempo.
+
+## En el documento en pdf del reporte vienen todos los resultados del programa. 
